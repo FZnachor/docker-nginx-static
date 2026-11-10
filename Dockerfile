@@ -135,9 +135,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
 # clean copy to detect a user-provided config in entrypoint
 COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf.dist
-
-COPY docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
+COPY --chmod=755 docker-entrypoint.sh /
 
 EXPOSE 80
 

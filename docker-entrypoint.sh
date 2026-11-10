@@ -28,7 +28,12 @@ enable_ipv6_listen() {
 
     grep -q "listen       \[::\]:80;" "$DEFAULT_CONF_FILE" && { entrypoint_log "$ME: info: IPv6 listen already enabled"; return 0; }
 
-    if [ "$(md5sum < "$DEFAULT_CONF_FILE" 2>/dev/null)" != "$(md5sum < "$DEFAULT_CONF_SHIPPED" 2>/dev/null)" ]; then
+    if [ ! -f "$DEFAULT_CONF_SHIPPED" ]; then
+        entrypoint_log "$ME: info: $DEFAULT_CONF_SHIPPED not found, assuming a custom config"
+        return 0
+    fi
+
+    if [ "$(md5sum < "$DEFAULT_CONF_FILE")" != "$(md5sum < "$DEFAULT_CONF_SHIPPED")" ]; then
         entrypoint_log "$ME: info: $DEFAULT_CONF_FILE differs from the shipped default config"
         return 0
     fi
